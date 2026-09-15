@@ -91,6 +91,22 @@ a default 10s timeout and its callback does not fire until the helper exits — 
 10.3s per banner versus 0.3s without. The poller awaits dispatch, so that stalls the whole
 poll loop.
 
+**Do not set `disableHierarchicalLookup` or `nodeModulesPaths` in the app's
+`metro.config.js`.** They look like the right monorepo hygiene, but `packages/app` is not a
+workspace member — it has its own complete `node_modules`, and several Expo packages are
+nested rather than hoisted (`expo-asset` lives in `node_modules/expo/node_modules`).
+Disabling the upward walk makes Metro fail to resolve them partway through the bundle.
+
+**The app pins `react-dom` via `overrides` to its own `react` version.** `expo-router` pulls
+`@expo/ui` → Radix, which needs `react-dom`; npm otherwise picks the newest one, whose peer
+demands a newer `react` than the SDK pins, and a clean `npm install` dies with ERESOLVE.
+`scripts/patch-app-package.mjs` sets this automatically on a fresh scaffold.
+
+**`expo export` and `expo install` both exit 0 on failure.** Never trust their exit code —
+grep the output for `Unable to resolve` / `ConfigError`, or check the artifact actually
+exists. `scripts/setup-app.sh` verifies each dependency landed in package.json for exactly
+this reason.
+
 ### Conventions
 
 - ESM with `"moduleResolution": "NodeNext"` — **relative imports need the `.js` extension**

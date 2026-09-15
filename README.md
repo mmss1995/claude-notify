@@ -77,11 +77,17 @@ npm run cli -- token     # prints the token and the daemon URL
 ### 3. The Android app
 
 ```bash
-./scripts/setup-app.sh       # scaffolds against the current Expo SDK
+./scripts/setup-app.sh       # scaffolds against the current Expo SDK and installs
 cd packages/app
-npm install
 npx eas init                 # creates the project id push needs
 npx eas build --profile development --platform android
+```
+
+`setup-app.sh` is safe to re-run; it skips the scaffold once `package.json` exists but always
+reconciles dependencies. To check the app compiles without a device:
+
+```bash
+cd packages/app && npx tsc --noEmit && npx expo export --platform android
 ```
 
 Install that build on the phone — **Expo Go cannot receive Android push notifications**, so a

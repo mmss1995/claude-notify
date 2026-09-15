@@ -11,10 +11,19 @@ export class ApiError extends Error {
   }
 }
 
+const REQUEST_TIMEOUT_MS = 8000;
+
 const trim = (url: string): string => url.trim().replace(/\/+$/, '');
 
 async function request<T>(settings: Settings, path: string, init: RequestInit = {}): Promise<T> {
   const url = `${trim(settings.daemonUrl)}${path}`;
+
+  // The daemon is on the mesh; if Tailscale is down this should fail fast rather
+  // than leave the list spinning. Built from AbortController rather than
+  // AbortSignal.timeout() because that static is not present on every Hermes
+  // build, and its absence would be a runtime crash TypeScript cannot catch.
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   let response: Response;
   try {
@@ -25,14 +34,14 @@ async function request<T>(settings: Settings, path: string, init: RequestInit = 
         authorization: `Bearer ${settings.authToken.trim()}`,
         accept: 'application/json',
       },
-      // The daemon is on the mesh; if Tailscale is down this should fail fast
-      // rather than leave the list spinning.
-      signal: AbortSignal.timeout(8000),
+      signal: controller.signal,
     });
-  } catch (err) {
+  } catch {
     throw new ApiError(
       `Cannot reach ${trim(settings.daemonUrl)}. Is Tailscale connected and the daemon running?`,
     );
+  } finally {
+    clearTimeout(timer);
   }
 
   if (response.status === 401) {

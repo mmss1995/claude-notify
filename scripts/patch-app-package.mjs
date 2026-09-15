@@ -24,6 +24,14 @@ pkg.dependencies = {
   '@ccn/shared': 'file:../shared',
 };
 
+// expo-router pulls in @expo/ui, which pulls Radix, which needs react-dom. npm
+// otherwise resolves the newest react-dom, whose peer demands a newer react than
+// the SDK pins - an ERESOLVE failure on a clean install. Pinning react-dom to the
+// project's own react version settles it without --legacy-peer-deps.
+if (pkg.dependencies?.react) {
+  pkg.overrides = { ...pkg.overrides, 'react-dom': pkg.dependencies.react };
+}
+
 pkg.scripts = {
   ...pkg.scripts,
   start: 'expo start --dev-client',

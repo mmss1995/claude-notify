@@ -7,18 +7,19 @@ const workspaceRoot = path.resolve(projectRoot, '../..');
 const config = getDefaultConfig(projectRoot);
 
 // @ccn/shared lives outside this project, so Metro has to be told to watch it.
-// The shared package points its "react-native" field at src/index.ts, which
-// means the app consumes the TypeScript directly - no build step to forget.
-config.watchFolders = [workspaceRoot];
+// The shared package exposes a "react-native" export condition pointing at
+// src/index.ts, so the app consumes the TypeScript source and there is no build
+// step to forget when the wire contract changes.
+config.watchFolders = [path.resolve(workspaceRoot, 'packages/shared')];
 
-config.resolver.nodeModulesPaths = [
-  path.resolve(projectRoot, 'node_modules'),
-  path.resolve(workspaceRoot, 'node_modules'),
-];
 config.resolver.extraNodeModules = {
   '@ccn/shared': path.resolve(workspaceRoot, 'packages/shared'),
 };
-// Without this, Metro walks up and can resolve two copies of react.
-config.resolver.disableHierarchicalLookup = true;
+
+// Deliberately NOT setting disableHierarchicalLookup or nodeModulesPaths here.
+// This project is not an npm workspace member - it has its own complete
+// node_modules - and several Expo packages are nested rather than hoisted
+// (expo-asset lives in node_modules/expo/node_modules). Disabling the upward
+// walk makes Metro fail to resolve them.
 
 module.exports = config;
