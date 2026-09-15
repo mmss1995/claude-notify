@@ -1,0 +1,12 @@
+[
+  {
+    "pid": 4242,
+    "cwd": "/tmp/whatever",
+    "kind": "interactive",
+    "startedAt": 1789400551141,
+    "sessionId": "future-status",
+    "name": "future-1",
+    "status": "compacting",
+    "someFieldAddedLater": true
+  }
+]

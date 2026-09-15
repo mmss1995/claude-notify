@@ -1,0 +1,20 @@
+[
+  {
+    "pid": 5200,
+    "cwd": "/Volumes/ExternalSSD/Repos/Eurobet - GitlabCodeland/digital-project-evolution",
+    "kind": "interactive",
+    "startedAt": 1789400551141,
+    "sessionId": "41294cf1-70e8-4f63-9742-e7c9e55ff92b",
+    "name": "digital-project-evolution-3b",
+    "status": "busy"
+  },
+  {
+    "pid": 71434,
+    "cwd": "/Volumes/ExternalSSD/Repos/Eurobet - GitlabCodeland",
+    "kind": "interactive",
+    "startedAt": 1789401903777,
+    "sessionId": "8fa8523f-7f21-488f-84c9-59bea52977fe",
+    "name": "eurobet-gitlabcodeland-56",
+    "status": "waiting"
+  }
+]

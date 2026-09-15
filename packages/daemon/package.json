@@ -1,0 +1,18 @@
+{
+  "name": "@ccn/daemon",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "daemon": "tsx src/daemon.ts",
+    "cli": "tsx src/cli.ts",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@ccn/shared": "*",
+    "node-notifier": "^10.0.1",
+    "zod": "^3.23.8"
+  }
+}

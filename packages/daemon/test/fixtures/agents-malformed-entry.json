@@ -1,0 +1,12 @@
+[
+  {
+    "pid": 1,
+    "cwd": "/tmp/ok",
+    "kind": "interactive",
+    "startedAt": 1789400551141,
+    "sessionId": "good",
+    "name": "good-1",
+    "status": "busy"
+  },
+  { "pid": "not-a-number", "sessionId": "bad" }
+]

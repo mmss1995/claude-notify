@@ -1,0 +1,27 @@
+{
+  "name": "claude-notification",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Watch local Claude Code sessions and push status changes to a phone.",
+  "workspaces": [
+    "packages/shared",
+    "packages/daemon"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "npm -w @ccn/shared run build && npm -w @ccn/daemon run build",
+    "test": "npm -w @ccn/daemon run test",
+    "typecheck": "npm -w @ccn/shared exec tsc --noEmit && npm -w @ccn/daemon exec tsc --noEmit",
+    "daemon": "npm -w @ccn/daemon run daemon",
+    "cli": "npm -w @ccn/daemon run cli --"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "@types/node-notifier": "^8.0.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}
